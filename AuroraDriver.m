@@ -175,14 +175,22 @@ classdef AuroraDriver < handle
         end
         
         
-        function startTracking(obj)
+        function startTracking(obj,dofast)
         %
         % startTracking()
         %
         % Puts the Aurora SCU into Tracking mode. This enables the position
         % reading functions, but disables configuration functions. For
         % further information, reffer to the Aurora_API_Guide page 3
-            obj.TSTART(obj.TRACKING_OPTION_RESET_COUNTER);
+            if nargin == 1
+                dofast = 0;
+            end
+            if dofast
+                p = obj.TRACKING_OPTION_FAST_MODE_RESET_COUNTER;
+            else
+                p = obj.TRACKING_OPTION_RESET_COUNTER;
+            end
+            obj.TSTART(p);
         end
         
         
@@ -440,6 +448,7 @@ classdef AuroraDriver < handle
                 % Format 1 should replace the ' ' character in the command
                 % string per a ':' character and append a CRC to the end of
                 % the command.
+                error('format 1 with CRC not implemented');
             else
                 fprintf(obj.serial_port, command);
             end
